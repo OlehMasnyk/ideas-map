@@ -1,0 +1,38 @@
+{
+  "name": "ideas-map",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/shared",
+    "apps/server",
+    "apps/web"
+  ],
+  "scripts": {
+    "postinstall": "npm run build -w @ideas-map/shared",
+    "dev": "concurrently -n server,web -c blue,green \"npm run dev -w @ideas-map/server\" \"npm run dev -w @ideas-map/web\"",
+    "build": "npm run build -w @ideas-map/shared && npm run build -w @ideas-map/server && npm run build -w @ideas-map/web",
+    "start": "npm run start -w @ideas-map/server",
+    "db:up": "docker compose up -d db",
+    "db:migrate": "npm run db:migrate -w @ideas-map/server",
+    "db:seed": "npm run db:seed -w @ideas-map/server",
+    "db:seed:demo": "npm run db:seed:demo -w @ideas-map/server",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.0"
+  },
+  "overrides": {
+    "deepmerge-ts": "^8.0.2"
+  }
+}
