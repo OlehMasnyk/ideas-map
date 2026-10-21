@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String          @id @default(uuid()) @db.Uuid
+  email        String          @unique
+  passwordHash String          @map("password_hash")
+  createdAt    DateTime        @default(now()) @map("created_at")
+  requests     DemandRequest[]
+
+  @@map("users")
+}
+
+model Category {
+  id       Int             @id @default(autoincrement())
+  slug     String          @unique
+  name     String
+  icon     String
+  requests DemandRequest[]
+
+  @@map("categories")
+}
+
+/// `location` is a PostGIS geography point; it is read and written with raw SQL.
+model DemandRequest {
+  id           String                               @id @default(uuid()) @db.Uuid
+  userId       String                               @map("user_id") @db.Uuid
+  categoryId   Int                                  @map("category_id")
+  location     Unsupported("geography(Point,4326)")
+  radiusMeters Int                                  @map("radius_meters")
+  comment      String?
+  createdAt    DateTime                             @default(now()) @map("created_at")
+  user         User                                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category     Category                             @relation(fields: [categoryId], references: [id])
+
+  @@index([userId, categoryId])
+  @@index([location], type: Gist)
+  @@map("demand_requests")
+}
