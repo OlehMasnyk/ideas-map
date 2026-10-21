@@ -48,6 +48,5 @@ authRouter.get('/me', async (req, res) => {
   const user = userId
     ? await prisma.user.findUnique({ where: { id: userId }, select: { id: true, email: true } })
     : null;
-  if (!user) throw new HttpError(401, 'Not signed in');
-  res.json(user satisfies PublicUser);
+  res.json(user satisfies PublicUser | null);
 });

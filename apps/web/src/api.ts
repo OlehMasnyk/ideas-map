@@ -50,7 +50,7 @@ function toQuery(params: Record<string, string | number | undefined>): string {
 }
 
 export const api = {
-  me: () => request<PublicUser>('/auth/me'),
+  me: () => request<PublicUser | null>('/auth/me'),
   login: (c: Credentials) => post<PublicUser>('/auth/login', c),
   register: (c: Credentials) => post<PublicUser>('/auth/register', c),
   logout: () => post<void>('/auth/logout'),

@@ -12,10 +12,13 @@ export function HeatLayer({ cells }: { cells: DemandCell[] }) {
   const layerRef = useRef<L.HeatLayer | null>(null);
 
   useEffect(() => {
-    const layer = L.heatLayer([], { radius: 35, blur: 25, minOpacity: 0.35, gradient: GRADIENT });
+    const layer = L.heatLayer([], { radius: 45, blur: 35, minOpacity: 0.35, gradient: GRADIENT });
     layer.addTo(map);
     layerRef.current = layer;
     return () => {
+      // leaflet.heat schedules redraws in an animation frame and crashes if the layer is gone by then.
+      const pending = (layer as L.HeatLayer & { _frame?: number })._frame;
+      if (pending) L.Util.cancelAnimFrame(pending);
       layer.remove();
       layerRef.current = null;
     };

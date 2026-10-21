@@ -71,7 +71,9 @@ export function RequestForm({ draft, categories, onChange, onSubmit, onCancel }:
       </fieldset>
 
       <label>
-        Within <strong>{formatRadius(draft.radiusMeters)}</strong>
+        <span>
+          Within <strong>{formatRadius(draft.radiusMeters)}</strong>
+        </span>
         <input
           type="range"
           min={RADIUS_MIN_METERS}
@@ -83,7 +85,9 @@ export function RequestForm({ draft, categories, onChange, onSubmit, onCancel }:
       </label>
 
       <label>
-        Comment <span className="muted small">(optional)</span>
+        <span>
+          Comment <span className="muted small">(optional)</span>
+        </span>
         <textarea
           rows={3}
           maxLength={COMMENT_MAX_LENGTH}
