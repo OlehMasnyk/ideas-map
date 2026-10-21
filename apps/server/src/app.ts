@@ -7,6 +7,7 @@ import { config } from './config.js';
 import { errorHandler, notFoundHandler } from './errors.js';
 import { authRouter } from './routes/auth.js';
 import { categoriesRouter } from './routes/categories.js';
+import { requestsRouter } from './routes/requests.js';
 
 export function createApp() {
   const app = express();
@@ -22,6 +23,7 @@ export function createApp() {
   });
   api.use('/auth', authRouter);
   api.use('/categories', categoriesRouter);
+  api.use('/requests', requestsRouter);
   api.use(notFoundHandler);
   app.use('/api', api);
 
