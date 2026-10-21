@@ -38,7 +38,9 @@ function LocateOnce({ enabled }: { enabled: boolean }) {
   return null;
 }
 
-function parseInitialView(params: URLSearchParams): { center: [number, number]; zoom: number } | null {
+function parseInitialView(
+  params: URLSearchParams,
+): { center: [number, number]; zoom: number } | null {
   const lat = Number(params.get('lat'));
   const lng = Number(params.get('lng'));
   if (!params.has('lat') || !params.has('lng') || !Number.isFinite(lat) || !Number.isFinite(lng)) {

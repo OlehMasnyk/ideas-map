@@ -27,7 +27,11 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const data: unknown = await res.json().catch(() => null);
   if (!res.ok) {
     const err = (data ?? {}) as Partial<ApiError>;
-    throw new ApiRequestError(res.status, err.error ?? `Request failed (${res.status})`, err.details);
+    throw new ApiRequestError(
+      res.status,
+      err.error ?? `Request failed (${res.status})`,
+      err.details,
+    );
   }
   return data as T;
 }

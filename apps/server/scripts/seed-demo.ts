@@ -30,14 +30,70 @@ interface Hotspot {
 }
 
 const HOTSPOTS: Hotspot[] = [
-  { name: 'Prenzlauer Berg', lat: 52.5388, lng: 13.4244, spreadMeters: 900, weight: 3, categories: { cafe: 3, bakery: 2, kids: 3 } },
-  { name: 'Kreuzberg', lat: 52.4986, lng: 13.4033, spreadMeters: 1000, weight: 3, categories: { cafe: 2, restaurant: 3, gym: 1 } },
-  { name: 'Friedrichshain', lat: 52.5145, lng: 13.4543, spreadMeters: 900, weight: 2, categories: { gym: 3, cafe: 2, restaurant: 2 } },
-  { name: 'Neukölln', lat: 52.4811, lng: 13.4354, spreadMeters: 1100, weight: 2, categories: { grocery: 3, pharmacy: 2, cafe: 1 } },
-  { name: 'Mitte', lat: 52.5208, lng: 13.4094, spreadMeters: 800, weight: 2, categories: { restaurant: 2, pharmacy: 1, grocery: 1 } },
-  { name: 'Charlottenburg', lat: 52.5058, lng: 13.3036, spreadMeters: 1200, weight: 1, categories: { bakery: 2, pharmacy: 2, other: 1 } },
-  { name: 'Lichtenberg', lat: 52.5155, lng: 13.4995, spreadMeters: 1300, weight: 1, categories: { grocery: 3, kids: 2, gym: 1 } },
-  { name: 'Wedding', lat: 52.5503, lng: 13.3593, spreadMeters: 1000, weight: 1, categories: { gym: 2, grocery: 2, other: 1 } },
+  {
+    name: 'Prenzlauer Berg',
+    lat: 52.5388,
+    lng: 13.4244,
+    spreadMeters: 900,
+    weight: 3,
+    categories: { cafe: 3, bakery: 2, kids: 3 },
+  },
+  {
+    name: 'Kreuzberg',
+    lat: 52.4986,
+    lng: 13.4033,
+    spreadMeters: 1000,
+    weight: 3,
+    categories: { cafe: 2, restaurant: 3, gym: 1 },
+  },
+  {
+    name: 'Friedrichshain',
+    lat: 52.5145,
+    lng: 13.4543,
+    spreadMeters: 900,
+    weight: 2,
+    categories: { gym: 3, cafe: 2, restaurant: 2 },
+  },
+  {
+    name: 'Neukölln',
+    lat: 52.4811,
+    lng: 13.4354,
+    spreadMeters: 1100,
+    weight: 2,
+    categories: { grocery: 3, pharmacy: 2, cafe: 1 },
+  },
+  {
+    name: 'Mitte',
+    lat: 52.5208,
+    lng: 13.4094,
+    spreadMeters: 800,
+    weight: 2,
+    categories: { restaurant: 2, pharmacy: 1, grocery: 1 },
+  },
+  {
+    name: 'Charlottenburg',
+    lat: 52.5058,
+    lng: 13.3036,
+    spreadMeters: 1200,
+    weight: 1,
+    categories: { bakery: 2, pharmacy: 2, other: 1 },
+  },
+  {
+    name: 'Lichtenberg',
+    lat: 52.5155,
+    lng: 13.4995,
+    spreadMeters: 1300,
+    weight: 1,
+    categories: { grocery: 3, kids: 2, gym: 1 },
+  },
+  {
+    name: 'Wedding',
+    lat: 52.5503,
+    lng: 13.3593,
+    spreadMeters: 1000,
+    weight: 1,
+    categories: { gym: 2, grocery: 2, other: 1 },
+  },
 ];
 
 // Deterministic PRNG so the demo looks the same every time.
@@ -69,9 +125,17 @@ function pickWeighted<T>(items: T[], weight: (item: T) => number): T {
 }
 
 const COMMENTS: Record<string, string[]> = {
-  cafe: ['Somewhere with good coffee and wifi', 'A quiet cafe to work from', 'Specialty coffee please!'],
+  cafe: [
+    'Somewhere with good coffee and wifi',
+    'A quiet cafe to work from',
+    'Specialty coffee please!',
+  ],
   restaurant: ['Affordable lunch place', 'Vegetarian restaurant', 'Family friendly dinner spot'],
-  grocery: ['Supermarket open late', 'Organic grocery store', 'Anything closer than 15 minutes walk'],
+  grocery: [
+    'Supermarket open late',
+    'Organic grocery store',
+    'Anything closer than 15 minutes walk',
+  ],
   pharmacy: ['The nearest pharmacy is too far', 'Pharmacy open on weekends'],
   gym: ['24h gym', 'Climbing or bouldering gym', 'Small gym with classes'],
   bakery: ['Fresh bread in the morning', 'A real bakery, not a chain'],
@@ -99,7 +163,14 @@ try {
   await prisma.user.createMany({ data: users });
 
   const perUserCategory = new Map<string, number>();
-  const rows: { userId: string; categoryId: number; lat: number; lng: number; radius: number; comment: string | null }[] = [];
+  const rows: {
+    userId: string;
+    categoryId: number;
+    lat: number;
+    lng: number;
+    radius: number;
+    comment: string | null;
+  }[] = [];
 
   let attempts = 0;
   while (rows.length < REQUEST_COUNT && attempts < REQUEST_COUNT * 5) {
@@ -127,7 +198,8 @@ try {
       Math.max(RADIUS_MIN_METERS, Math.round((300 + Math.abs(gaussian()) * 500) / 50) * 50),
     );
     const options = COMMENTS[slug] ?? [];
-    const comment = rand() < 0.4 && options.length ? options[Math.floor(rand() * options.length)]! : null;
+    const comment =
+      rand() < 0.4 && options.length ? options[Math.floor(rand() * options.length)]! : null;
     rows.push({ userId: user.id, categoryId, lat, lng, radius, comment });
   }
 

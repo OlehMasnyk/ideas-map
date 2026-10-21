@@ -13,7 +13,8 @@ export function AuthPage({ mode }: Props) {
   const { user, login, register } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const next = params.get('next')?.startsWith('/') ? params.get('next')! : '/';
+  const rawNext = params.get('next') ?? '';
+  const next = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);

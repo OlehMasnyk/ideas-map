@@ -10,6 +10,21 @@ export default defineConfig({
       '/api': 'http://localhost:4000',
     },
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            { name: 'leaflet', test: /node_modules[\\/](leaflet|leaflet\.heat|react-leaflet)/ },
+            {
+              name: 'react',
+              test: /node_modules[\\/](react|react-dom|react-router|scheduler)[\\/]/,
+            },
+          ],
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,
